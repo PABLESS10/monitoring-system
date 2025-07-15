@@ -17,7 +17,8 @@ WORKDIR /app
 COPY . .
 
 # Compilar el monitor (C++ binary)
-RUN g++ -std=c++17 -o monitor monitor.cpp -lmysqlcppconn -lpthread
+# Añadimos la opción -I./include para que g++ busque también en esa carpeta
+RUN g++ -std=c++17 -I./include -o monitor monitor.cpp -lmysqlcppconn -lpthread
 
 # Compilar el servidor Go
 RUN go build -o server main.go

@@ -17,8 +17,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <fstream>             // Para leer config.json
-#include <json.hpp>            // Librería JSON (en include)
+#include <fstream>             
+#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
@@ -238,25 +238,27 @@ void apiServerThread() {
         std::string request(buffer, received);
 
         if (request.find("GET /status") == 0 || request.find("GET /health") == 0 || request.find("GET /metrics") == 0) {
-    MonitoringResult currentResult;
-    {
-        std::lock_guard<std::mutex> lock(resultMutex);
-        currentResult = lastCheckResult;
+            MonitoringResult currentResult;
+            {
+                std::lock_guard<std::mutex> lock(resultMutex);
+                currentResult = lastCheckResult;
+            }
+
+            std::ostringstream json;
+            json << "{"
+                 << "\"alerts\":" << currentResult.alerts << ","
+                 << "\"last_check\":\"" << currentResult.lastCheckTime << "\","
+                 << "\"rows_processed\":" << currentResult.rowsProcessed
+                 << "}";
+
+            sendHttpResponse(clientSock, json.str());
+        } else {
+            const char* notFound = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n";
+            send(clientSock, notFound, strlen(notFound), 0);
+        }
+
+        close(clientSock);
     }
-
-    std::ostringstream json;
-    json << "{"
-         << "\"alerts\":" << currentResult.alerts << ","
-         << "\"last_check\":\"" << currentResult.lastCheckTime << "\","
-         << "\"rows_processed\":" << currentResult.rowsProcessed
-         << "}";
-
-    sendHttpResponse(clientSock, json.str());
-} else {
-    const char* notFound = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n";
-    send(clientSock, notFound, strlen(notFound), 0);
-}
-
 
     close(serverSock);
 }

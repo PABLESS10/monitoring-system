@@ -1,9 +1,9 @@
 {
-  "database_host": "mysql",
-  "database_port": 3306,
-  "database_user": "monitor",
-  "database_password": "TuPassword123",
-  "database_name": "monitoring",
+  "mysql_host": "localhost",
+  "mysql_port": 3306,
+  "mysql_user": "monitor",
+  "mysql_password": "TuPassword123",
+  "mysql_db": "monitoring",
   "query_interval": 10,
   "rest_port": 8080,
   "thresholds": {
