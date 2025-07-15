@@ -1,0 +1,16 @@
+{
+  "database_host": "mysql",
+  "database_port": 3306,
+  "database_user": "monitor",
+  "database_password": "TuPassword123",
+  "database_name": "monitoring",
+  "query_interval": 10,
+  "rest_port": 8080,
+  "thresholds": {
+    "Temperature": { "min": 10, "max": 50 },
+    "Pressure": { "min": 20, "max": 55 },
+    "Humidity": { "min": 10, "max": 70 },
+    "CPU_Usage": { "min": 0, "max": 70 },
+    "Memory_Usage": { "min": 0, "max": 70 }
+  }
+}

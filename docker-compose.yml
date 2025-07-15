@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: monitoring
+      MYSQL_USER: monitor
+      MYSQL_PASSWORD: TuPassword123
+    ports:
+      - "3306:3306"
+    networks:
+      - monitor_network
+
+  monitor:
+    build: .
+    container_name: monitor_container
+    depends_on:
+      - mysql
+    volumes:
+      - ./config.json:/app/config.json
+    ports:
+      - "8080:8080"
+    networks:
+      - monitor_network
+
+networks:
+  monitor_network:
+    driver: bridge
