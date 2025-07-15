@@ -103,7 +103,7 @@ bool loadConfig(const std::string& filename) {
         dbConfig.password = configJson["mysql_password"].get<std::string>();
         dbConfig.database = configJson["mysql_db"].get<std::string>();
 
-        // Campos opcionales
+        
         if (configJson.contains("query_interval") && !configJson["query_interval"].is_null()) {
             queryInterval = configJson["query_interval"].get<int>();
         }
@@ -111,7 +111,7 @@ bool loadConfig(const std::string& filename) {
             serverPort = configJson["rest_port"].get<int>();
         }
 
-        // Leer thresholds si existen
+        
         if (configJson.contains("thresholds") && !configJson["thresholds"].is_null()) {
             thresholds.clear();
             for (const auto& [name, values] : configJson["thresholds"].items()) {
